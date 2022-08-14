@@ -1,0 +1,46 @@
+.background-content-grid {
+    height: 100%;
+    width: 100%;
+}
+
+#background-content-images {
+    height: 100%;
+    width: 100%;
+    bottom: 50%;
+}
+
+#airPlane {
+    width: 100px;
+    height: 100px;
+    pointer-events: none;
+    cursor: default;
+    position: flex;
+    bottom: 10%;
+}
+
+#cloudThree {
+    width: 200px;
+    height: 200px;
+    pointer-events: none;
+    cursor: default;
+    position: flex;
+    bottom: 10%;
+}
+
+#cloudTwo {
+    width: 200px;
+    height: 200px;
+    pointer-events: none;
+    cursor: default;
+    position: flex;
+    bottom: 10%;
+}
+
+#cloudOne{
+    width: 250px;
+    height: 250px;
+    pointer-events: none;
+    cursor: default;
+    position: flex;
+    bottom: 10%;
+}

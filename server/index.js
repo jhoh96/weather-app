@@ -6,7 +6,7 @@ const axios = require("axios");
 const PORT = process.env.PORT || 3001;
 
 // API KEY VALUES & STUFF HERE INITIALLY
-const APIkey = "4a1af68827fd827f35c78243b5813c37";
+const API_KEY = `4a1af68827fd827f35c78243b5813c37`;
 
 app.use(express.json());
 app.use(cors());
@@ -27,12 +27,10 @@ app.get("/", (req, res) => {
 app.get("/weather", async (req, res) => {
   const lat = 33.44;
   const lon = 94.04;
-  const part = "";
-  const APIKey = '4a1af68827fd827f35c78243b5813c37'
   try {
     await axios
       .get(
-        `https://api.openweathermap.org/data/3.0/onecall?lat=${lat}&lon=${lon}&exclude=${part}&appid=${APIkey}`
+        `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${API_KEY}`
       )
       .then((response) => {
         console.log(response.data);
