@@ -24,20 +24,22 @@ app.get("/", (req, res) => {
   res.send(sampleValue);
 });
 
-app.get("/weather", async (req, res) => {
-  const lat = 33.44;
-  const lon = 94.04;
+app.get("/api/weather", async (req, res) => {
+  const lat = req.query.lat;
+  const lon = req.query.lon;
+  console.log('lat : ' + lat)
+  console.log('lon : ' + lon)
   try {
     await axios
       .get(
         `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${API_KEY}`
       )
       .then((response) => {
-        console.log(response.data);
+        // console.log(response.data);
         res.json(response.data)
       });
   } catch (err) {
-    console.log(err);
+    // console.log(err);
     return
   }
 });

@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { Input, Button, Tooltip } from "@chakra-ui/react";
 import { TbCurrentLocation } from "react-icons/tb";
+import { useNavigate } from "react-router-dom";
+import Axios from "axios";
 
 // Page imports
 import MainBackground from "../components/MainBackground";
@@ -11,12 +13,19 @@ const date = new Date();
 const time = date.getHours();
 
 export default function Main() {
+  // Main Page State usage
   const [backgroundColor, setBackgroundColor] = useState(""); // This will be assigned as currentTime to change background depending on time of day
   const [currentTime, setCurrentTime] = useState<any>(); // Set this to current time of day when (maybe location search is executed) or maybe just next page
   const [inputColor, setInputColor] = useState<string>();
   const [putClouds, setPutClouds] = useState(false);
   const [currentLocation, setCurrentLocation] = useState<any>();
-  const [searchInput, setSearchInput] = useState('');
+  const [searchInput, setSearchInput] = useState("");
+  const navigate = useNavigate();
+
+  // States to pass to results page
+  const [data, setData] = useState();
+
+
 
   useEffect(() => {
     setCurrentTime(time);
@@ -41,27 +50,46 @@ export default function Main() {
   }, [currentTime, backgroundColor]);
 
   const handleClick = () => {
-    if(currentLocation) {
-        console.log(currentLocation)
+    if (currentLocation) {
+    //   console.log(currentLocation);
+      try {
+        Axios.get("http://localhost:3001/api/weather", {
+          method: "GET",
+          params: {
+            lat: currentLocation.latitude,
+            lon: currentLocation.longitude,
+          },
+        }).then((response) => { 
+          setData(response.data)
+          console.log(response.data)
+        });
+      } catch (err) {
+        console.log(err);
+      }
     } else {
-        console.log(searchInput)
+      console.log(searchInput);
     }
+
+    navigate("results_page", {
+        state: {
+            data: data
+        }
+    })
   };
 
   const handleClickReset = () => {
     setCurrentLocation(null);
-    setSearchInput('')
-  }
+    setSearchInput("");
+  };
 
   const handleGPSClick = () => {
     navigator.geolocation.getCurrentPosition((pos) => {
-        var latitude:Number = pos.coords.latitude;
-        var longitude:Number = pos.coords.longitude;
-        setCurrentLocation({latitude, longitude})
-    })
-    console.log(currentLocation)
-  }
-
+      var latitude: Number = pos.coords.latitude;
+      var longitude: Number = pos.coords.longitude;
+      setCurrentLocation({ latitude, longitude });
+    });
+    // console.log(currentLocation);
+  };
 
   return (
     <div className="main-page-div" style={{ background: backgroundColor }}>
@@ -69,10 +97,10 @@ export default function Main() {
         <Input
           id="location-input"
           variant="filled"
-          placeholder='Please enter your city'
+          placeholder="Please enter your city"
           style={{ background: inputColor }}
-          value={currentLocation ? 'your location' : searchInput}
-          onChange={e => setSearchInput(e.currentTarget.value)}
+          value={currentLocation ? "your location" : searchInput}
+          onChange={(e) => setSearchInput(e.currentTarget.value)}
         />
         <Tooltip hasArrow label="Use my location" bg={inputColor}>
           <Button
@@ -84,7 +112,7 @@ export default function Main() {
           />
         </Tooltip>
       </div>
-      <div className='button-div'>
+      <div className="button-div">
         <Button
           id="input-button"
           colorScheme="blue"
@@ -103,7 +131,7 @@ export default function Main() {
           onClick={handleClickReset}
           style={{ background: inputColor }}
         >
-          Reset 
+          Reset
         </Button>
       </div>
       {putClouds ? <MainBackground /> : null}
