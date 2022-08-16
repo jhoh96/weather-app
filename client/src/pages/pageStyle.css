@@ -82,3 +82,13 @@
     color: red;
     border: red 2px solid;
 }
+
+
+/* 
+    ************* RESULTS PAGE CSS HERE *************
+*/
+
+.main-results-div{
+    width: 100vw;
+    height: 100vh;
+}
