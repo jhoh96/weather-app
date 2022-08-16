@@ -7,7 +7,7 @@ export default function ResultsPage() {
   const { state } = useLocation();
 
   const handleButtonClick = () => {
-    console.log(data.data.main);
+    console.log(data.data);
   };
 
   useEffect(() => {

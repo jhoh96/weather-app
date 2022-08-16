@@ -19,6 +19,7 @@ export default function Main() {
   const [inputColor, setInputColor] = useState<string>();
   const [putClouds, setPutClouds] = useState(false);
   const [currentLocation, setCurrentLocation] = useState<any>();
+  const [foundLocation, setFoundLocation] = useState<boolean>(false);
   const [searchInput, setSearchInput] = useState("");
   const navigate = useNavigate();
 
@@ -27,13 +28,13 @@ export default function Main() {
 
   useEffect(() => {
     setCurrentTime(time);
-    if (7 <= time || time >= 18) {
+    if (7 <= time && time >= 18) {
       setBackgroundColor(
         "linear-gradient(0deg, rgba(4,81,152,1) 0%, rgba(89,195,255,1) 100%)"
       );
       setPutClouds(true);
     }
-    if (19 <= time || time >= 17) {
+    if (19 <= time && time >= 17) {
       setBackgroundColor(
         "linear-gradient(0deg, rgba(231,84,5,1) 0%, rgba(255,228,42,1) 100%)"
       );
@@ -48,33 +49,17 @@ export default function Main() {
   }, [currentTime, backgroundColor]);
 
   const handleClick = () => {
-    if (currentLocation) {
-      try {
-        Axios.get("http://localhost:3001/api/weather", {
-          method: "GET",
-          params: {
-            lat: currentLocation.latitude,
-            lon: currentLocation.longitude,
-          },
-        }).then((response : any) => {
-          setData(response.data);
-          navigate("results_page", {
-            state: {
-              data: data,
-            },
-          });
-        });
-      } catch (err) {
-        console.log(err);
-      }
-    } else {
-      console.log(searchInput);
-    }
+    navigate("results_page", {
+      state: {
+        data: data,
+      },
+    });
   };
 
   const handleClickReset = () => {
     setCurrentLocation(null);
     setSearchInput("");
+    setFoundLocation(false);
   };
 
   const handleGPSClick = () => {
@@ -83,8 +68,26 @@ export default function Main() {
       var longitude: Number = pos.coords.longitude;
       setCurrentLocation({ latitude, longitude });
     });
-    // console.log(currentLocation);
+    setFoundLocation(true);
   };
+
+  useEffect(() => {
+    if (foundLocation) {
+      try {
+        Axios.get("http://localhost:3001/api/weather", {
+          method: "GET",
+          params: {
+            lat: currentLocation.latitude,
+            lon: currentLocation.longitude,
+          },
+        }).then((response: any) => {
+          setData(response.data);
+        });
+      } catch (err) {
+        return
+      }
+    }
+  }, [foundLocation, currentLocation]);
 
   return (
     <div className="main-page-div" style={{ background: backgroundColor }}>
