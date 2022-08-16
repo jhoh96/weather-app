@@ -27,15 +27,12 @@ app.get("/", (req, res) => {
 app.get("/api/weather", async (req, res) => {
   const lat = req.query.lat;
   const lon = req.query.lon;
-  console.log('lat : ' + lat)
-  console.log('lon : ' + lon)
   try {
     await axios
       .get(
         `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${API_KEY}`
       )
       .then((response) => {
-        // console.log(response.data);
         res.json(response.data)
       });
   } catch (err) {

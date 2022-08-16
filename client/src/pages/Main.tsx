@@ -23,9 +23,7 @@ export default function Main() {
   const navigate = useNavigate();
 
   // States to pass to results page
-  const [data, setData] = useState();
-
-
+  const [data, setData] = useState<any>();
 
   useEffect(() => {
     setCurrentTime(time);
@@ -51,7 +49,6 @@ export default function Main() {
 
   const handleClick = () => {
     if (currentLocation) {
-    //   console.log(currentLocation);
       try {
         Axios.get("http://localhost:3001/api/weather", {
           method: "GET",
@@ -59,9 +56,13 @@ export default function Main() {
             lat: currentLocation.latitude,
             lon: currentLocation.longitude,
           },
-        }).then((response) => { 
-          setData(response.data)
-          console.log(response.data)
+        }).then((response : any) => {
+          setData(response.data);
+          navigate("results_page", {
+            state: {
+              data: data,
+            },
+          });
         });
       } catch (err) {
         console.log(err);
@@ -69,12 +70,6 @@ export default function Main() {
     } else {
       console.log(searchInput);
     }
-
-    navigate("results_page", {
-        state: {
-            data: data
-        }
-    })
   };
 
   const handleClickReset = () => {
