@@ -23,6 +23,11 @@ export default function Main() {
   const [searchInput, setSearchInput] = useState("");
   const navigate = useNavigate();
 
+  const dayTime = 'linear-gradient(0deg, rgba(4,81,152,1) 0%, rgba(89,195,255,1) 100%)'
+  const afternoon = 'linear-gradient(0deg, rgba(2,2,85,1) 0%, rgba(64,62,103,1) 100%)'
+  const nightTime = 'linear-gradient(0deg, rgba(231,84,5,1) 0%, rgba(255,228,42,1) 100%)'
+
+
   // States to pass to results page
   const [data, setData] = useState<any>();
 
@@ -52,6 +57,9 @@ export default function Main() {
     navigate("results_page", {
       state: {
         data: data,
+        dayTime : dayTime,
+        afterNoon: afternoon,
+        nightTime : nightTime
       },
     });
   };
