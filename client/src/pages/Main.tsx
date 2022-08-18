@@ -23,29 +23,34 @@ export default function Main() {
   const [searchInput, setSearchInput] = useState("");
   const navigate = useNavigate();
 
-  const dayTime = 'linear-gradient(0deg, rgba(4,81,152,1) 0%, rgba(89,195,255,1) 100%)'
-  const afternoon = 'linear-gradient(0deg, rgba(2,2,85,1) 0%, rgba(64,62,103,1) 100%)'
-  const nightTime = 'linear-gradient(0deg, rgba(231,84,5,1) 0%, rgba(255,228,42,1) 100%)'
-
+  const dayTime =
+    "linear-gradient(0deg, rgba(4,81,152,1) 0%, rgba(89,195,255,1) 100%)";
+  const afternoon =
+    "linear-gradient(0deg, rgba(2,2,85,1) 0%, rgba(64,62,103,1) 100%)";
+  const nightTime =
+    "linear-gradient(0deg, rgba(231,84,5,1) 0%, rgba(255,228,42,1) 100%)";
 
   // States to pass to results page
   const [data, setData] = useState<any>();
 
   useEffect(() => {
     setCurrentTime(time);
-    if (7 <= time && time >= 18) {
+    //day time
+    if (7 <= time && time <= 17) {
       setBackgroundColor(
         "linear-gradient(0deg, rgba(4,81,152,1) 0%, rgba(89,195,255,1) 100%)"
       );
       setPutClouds(true);
     }
-    if (19 <= time && time >= 17) {
+    // afternoon // going into night time
+    if (18 <= time && time <= 19) {
       setBackgroundColor(
         "linear-gradient(0deg, rgba(231,84,5,1) 0%, rgba(255,228,42,1) 100%)"
       );
       setInputColor("#F05800");
       setPutClouds(false);
     }
+    // night time to early morning
     setBackgroundColor(
       "linear-gradient(0deg, rgba(2,2,85,1) 0%, rgba(64,62,103,1) 100%)"
     );
@@ -57,9 +62,9 @@ export default function Main() {
     navigate("results_page", {
       state: {
         data: data,
-        dayTime : dayTime,
+        dayTime: dayTime,
         afterNoon: afternoon,
-        nightTime : nightTime
+        nightTime: nightTime,
       },
     });
   };
@@ -92,13 +97,18 @@ export default function Main() {
           setData(response.data);
         });
       } catch (err) {
-        return
+        return;
       }
     }
   }, [foundLocation, currentLocation]);
 
   return (
-    <div className="main-page-div" style={{ background: backgroundColor }}>
+    <div
+      className="main-page-div"
+      style={{
+        background: backgroundColor,
+      }}
+    >
       <div className="input-div">
         <Input
           id="location-input"
