@@ -1,34 +1,43 @@
 import React, { useState, useEffect } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import { Button, Grid, GridItem } from "@chakra-ui/react";
 
+
+export interface ResultsProps {
+  state : {
+    data: any,
+    background: string
+  }
+}
+
 export default function ResultsPage() {
-  const [data, setData] = useState<any>();
-  const { state } = useLocation();
-  // const dayTime:string = state.dayTime
+  // const { state } = useLocation();
+  const location = useLocation();
+  const data = (location as ResultsProps)
+  const [backgroundStyle, setBackgroundStyle] = useState<any>();
+
 
   const handleButtonClick = () => {
-    console.log(data.data);
-    // console.log(dayTime)
+    console.log(backgroundStyle);
   };
 
   useEffect(() => {
-    setData(state);
-  }, [state]);
+    setBackgroundStyle(data.state.background)
+  },[data])
 
   return (
     <div>
       <div className="main-results-div">
         <Grid h="100vh" gap={5}>
-          <GridItem colSpan={2} bg="papayawhip">
+          <GridItem colSpan={2} bg={backgroundStyle}>
             <Button
               colorScheme="teal"
               variant="solid"
               onClick={handleButtonClick}
             />
           </GridItem>
-          <GridItem colSpan={2} bg="papayawhip" />
-          <GridItem colSpan={4} bg="tomato" />
+          <GridItem colSpan={2} bg={backgroundStyle} />
+          <GridItem colSpan={4} bg={backgroundStyle} />
         </Grid>
       </div>
     </div>
